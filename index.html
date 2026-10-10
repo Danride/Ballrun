@@ -4,10 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <meta name="theme-color" content="#000000" />
-<title>NOIR CUBE — VK Mini App</title>
+<title>CUBERUN — VK Mini App</title>
 <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 <style>
-  /* CSS safe area через env + переопределяется из VK Bridge если доступно */
   :root {
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -98,52 +97,55 @@
     font-variant-numeric:tabular-nums; color:#bdbdbd; }
   .ability-btn.active .ability-count { color:#80d8ff; }
 
+  /* === Overlay — адаптивный под телефон и ПК === */
   .overlay { position:absolute; inset:0; display:flex; flex-direction:column;
     align-items:center; justify-content:center; gap:10px;
     background:rgba(0,0,0,0.72);
-    text-align:center; box-sizing:border-box;
+    text-align:center;
     padding: calc(16px + var(--safe-top)) calc(16px + var(--safe-right))
              calc(16px + var(--safe-bottom)) calc(16px + var(--safe-left));
-    z-index: 10; }
-  .title { font-size:52px; line-height:1.02; font-weight:900; color:#fff; letter-spacing:6px;
-    text-shadow:0 0 20px rgba(255,255,255,0.55); margin-bottom:6px; }
-  .subtitle { color:#bdbdbd; font-size:11px; letter-spacing:2px; max-width:340px; text-transform:uppercase; }
-  .play-btn { margin-top:22px; padding:15px 58px; font-size:19px; font-weight:900;
-    letter-spacing:6px; color:#000; background:#fff; border:2px solid #fff;
-    border-radius:4px; cursor:pointer; font-family:inherit; }
+    z-index: 10; overflow-y: auto; }
+
+  .title { font-size: clamp(36px, 12vw, 64px);
+    line-height:1.0; font-weight:900; color:#fff; letter-spacing: clamp(4px, 2vw, 8px);
+    text-shadow:0 0 24px rgba(255,255,255,0.55); margin-bottom: 4px; }
+  .play-btn { margin-top: 22px;
+    padding: clamp(12px, 2vh, 16px) clamp(40px, 8vw, 66px);
+    font-size: clamp(16px, 3vw, 20px); font-weight:900;
+    letter-spacing: clamp(3px, 1vw, 6px); color:#000; background:#fff;
+    border:2px solid #fff; border-radius:6px; cursor:pointer; font-family:inherit; }
   .play-btn:active { transform:scale(0.97); }
-  .menu-row { display:flex; gap:8px; margin-top:20px; flex-wrap:wrap; justify-content:center; }
+  .menu-row { display:flex; gap:10px; margin-top: 20px; flex-wrap:wrap; justify-content:center; }
   .menu-btn { display:flex; flex-direction:column; align-items:center; gap:6px;
-    padding:10px 16px; min-width:86px; background:rgba(255,255,255,0.08);
+    padding: 11px 20px; min-width: 96px;
+    background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.35); border-radius:12px; cursor:pointer;
     color:#fff; font-family:inherit; }
   .menu-btn:active { transform:scale(0.96); }
   .menu-btn-icon { font-size:22px; display:flex; align-items:center; justify-content:center; }
-  .menu-btn-text { font-size:9px; font-weight:900; letter-spacing:2px; }
-  .bank-line { margin-top:20px; color:#9d9d9d; font-size:11px; letter-spacing:3px;
+  .menu-btn-text { font-size:10px; font-weight:900; letter-spacing:2px; }
+  .bank-line { margin-top: 20px; color:#9d9d9d;
+    font-size: clamp(10px, 2.5vw, 12px); letter-spacing:3px;
     font-weight:800; font-variant-numeric:tabular-nums;
-    display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap: wrap; }
+    display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap: wrap; }
 
-  .stats-card { width:100%; max-width:420px;
+  .stats-card { width:100%; max-width: 440px;
     background:rgba(10,10,14,0.97);
     border:1px solid rgba(255,255,255,0.25); border-radius:18px;
-    padding:22px 18px 18px;
+    padding: clamp(16px, 3vh, 24px) clamp(14px, 3vw, 22px);
     text-align:center;
     animation:cardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
   @keyframes cardIn {
     from { opacity:0; transform: scale(0.92) translateY(20px); }
     to   { opacity:1; transform: scale(1) translateY(0); }
   }
-  .stats-title { font-size:20px; font-weight:900; letter-spacing:6px; color:#fff;
-    margin-bottom:4px; }
+  .stats-title { font-size: clamp(16px, 4vw, 20px); font-weight:900;
+    letter-spacing: clamp(4px, 1.5vw, 6px); color:#fff; margin-bottom:4px; }
   .stats-subtitle { font-size:10px; letter-spacing:3px; font-weight:800; color:#9d9d9d;
-    margin-bottom:16px; min-height:12px; text-transform:uppercase; }
+    margin-bottom: 16px; min-height:12px; text-transform:uppercase; }
   .stats-subtitle.record { color:#fff;
     animation: recordPulse 1.6s ease-in-out infinite; }
-  @keyframes recordPulse {
-    0%,100% { opacity:0.75; }
-    50%     { opacity:1; }
-  }
+  @keyframes recordPulse { 0%,100% { opacity:0.75; } 50% { opacity:1; } }
   .stats-rows { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
   .stat-item { display:grid;
     grid-template-columns: 30px 1fr auto;
@@ -170,30 +172,32 @@
   .stat-item.star .stat-icon { color:#ffd966; }
   .stat-label { font-size:10px; letter-spacing:3px; font-weight:800;
     color:#bdbdbd; text-align:left; }
-  .stat-value { font-size:22px; font-weight:900;
+  .stat-value { font-size: clamp(18px, 4vw, 22px); font-weight:900;
     font-variant-numeric:tabular-nums; color:#fff;
     min-width:60px; text-align:right; }
   .stat-value .unit { font-size:10px; opacity:0.6; letter-spacing:2px;
     margin-left:3px; font-weight:800; }
   .stats-buttons { display:flex; gap:8px; justify-content:center;
     opacity:0; animation: rowIn 0.4s ease-out 0.75s forwards; }
-  .button { padding:12px 28px; font-size:13px; font-weight:900; letter-spacing:3px;
+  .button { padding: 12px 28px; font-size:13px; font-weight:900; letter-spacing:3px;
     color:#000; background:#fff; border:2px solid #fff; border-radius:6px;
     cursor:pointer; font-family:inherit; }
   .button.outline { background:transparent; color:#fff; }
   .button:active { transform:scale(0.97); }
 
-  .revive-card { width:100%; max-width:380px;
+  .revive-card { width:100%; max-width: 400px;
     background:rgba(10,10,14,0.97);
     border:1px solid rgba(255,255,255,0.3); border-radius:18px;
-    padding:22px 18px 16px; text-align:center;
+    padding: clamp(18px, 3vh, 24px) clamp(14px, 3vw, 20px) clamp(14px, 2vh, 18px);
+    text-align:center;
     animation:cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .revive-title { font-size:20px; font-weight:900; letter-spacing:6px; color:#fff; margin-bottom:4px; }
+  .revive-title { font-size: clamp(16px, 4vw, 20px); font-weight:900;
+    letter-spacing: clamp(4px, 1.5vw, 6px); color:#fff; margin-bottom:4px; }
   .revive-subtitle { font-size:10px; letter-spacing:2px; color:#9d9d9d;
     margin-bottom:16px; text-transform:uppercase; }
   .revive-buttons { display:flex; gap:8px; margin-bottom:12px; }
   .revive-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;
-    padding:16px 10px; background:rgba(255,255,255,0.06);
+    padding: 16px 10px; background:rgba(255,255,255,0.06);
     border:1px solid rgba(255,255,255,0.3); border-radius:12px;
     color:#fff; font-family:inherit; cursor:pointer; }
   .revive-btn:active { transform:scale(0.97); }
@@ -216,16 +220,22 @@
   .ad-spinner { color:#fff; margin:8px auto 4px; animation: spin 1.2s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .panel { width:100%; max-width:440px; max-height:88vh; display:flex; flex-direction:column;
-    background:rgba(10,10,14,0.96); border:1px solid rgba(255,255,255,0.35); border-radius:16px;
-    padding:16px 16px 14px; text-align:left; }
-  .panel-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-  .panel-title { color:#fff; font-size:20px; font-weight:900; letter-spacing:4px; }
-  .panel-bank { color:#fff; font-size:15px; font-weight:900; letter-spacing:1px;
+  .panel { width:100%; max-width: 460px;
+    max-height: 88vh; display:flex; flex-direction:column;
+    background:rgba(10,10,14,0.96);
+    border:1px solid rgba(255,255,255,0.35); border-radius:16px;
+    padding: clamp(14px, 2.5vh, 20px) clamp(12px, 3vw, 18px) clamp(12px, 2vh, 16px);
+    text-align:left; }
+  .panel-header { display:flex; justify-content:space-between; align-items:center;
+    margin-bottom: 12px; gap: 10px; }
+  .panel-title { color:#fff; font-size: clamp(16px, 4vw, 20px); font-weight:900;
+    letter-spacing: clamp(3px, 1.5vw, 4px); }
+  .panel-bank { color:#fff; font-size: clamp(13px, 3vw, 15px); font-weight:900;
+    letter-spacing:1px;
     background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.4);
     border-radius:10px; padding:5px 12px; display:flex; align-items:center; gap:5px; }
   .panel-list { display:flex; flex-direction:column; gap:8px; overflow-y:auto;
-    max-height:66vh; padding-right:2px; -webkit-overflow-scrolling: touch; }
+    max-height: 66vh; padding-right:2px; -webkit-overflow-scrolling: touch; }
   .panel-item { display:flex; align-items:center; gap:10px;
     background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.15);
     border-radius:12px; padding:10px 12px; }
@@ -266,22 +276,9 @@
     padding:12px 16px; background:rgba(255,255,255,0.04);
     border:1px solid rgba(255,255,255,0.15); border-radius:12px; }
   .stat-label-panel { color:#bdbdbd; font-size:11px; font-weight:800; letter-spacing:3px; }
-  .stat-value-panel { color:#fff; font-size:24px; font-weight:900;
+  .stat-value-panel { color:#fff; font-size: clamp(18px, 4vw, 24px); font-weight:900;
     font-variant-numeric:tabular-nums; display:flex; align-items:center; gap:6px; }
   .panel-stat-list { display:flex; flex-direction:column; gap:10px; }
-
-  /* === Мобильная адаптация === */
-  @media (max-width: 480px) {
-    .title { font-size:44px; letter-spacing:4px; }
-    .play-btn { padding:14px 48px; font-size:18px; letter-spacing:5px; }
-    .menu-btn { min-width:78px; padding:9px 14px; }
-    .score-text { font-size:22px; }
-    #distance { font-size:20px; }
-    .stats-title { font-size:18px; letter-spacing:5px; }
-    .stat-value { font-size:20px; }
-    .revive-title { font-size:18px; }
-    .panel-title { font-size:18px; }
-  }
 </style>
 </head>
 <body>
@@ -316,17 +313,12 @@
   <div id="abilities-bar" class="hidden"></div>
 
   <div id="menu" class="overlay">
-    <div class="title">NOIR<br>CUBE</div>
-    <div class="subtitle">волнистая дорога · сужения · расширения · 13 тем</div>
+    <div class="title">CUBERUN</div>
     <button id="play-btn" class="play-btn">ИГРАТЬ</button>
     <div class="menu-row">
       <button class="menu-btn" data-panel="shop">
         <span class="menu-btn-icon ic" data-icon="cart"></span>
         <span class="menu-btn-text">МАГАЗИН</span>
-      </button>
-      <button class="menu-btn" data-panel="upgrades">
-        <span class="menu-btn-icon ic" data-icon="bolt"></span>
-        <span class="menu-btn-text">УЛУЧШЕНИЯ</span>
       </button>
       <button class="menu-btn" data-panel="profile">
         <span class="menu-btn-icon ic" data-icon="user"></span>
@@ -377,7 +369,7 @@ function applyIcons(root = document) {
   });
 }
 
-/* ============================== ОПРЕДЕЛЕНИЕ ПЛАТФОРМЫ ================= */
+/* ============================== ПЛАТФОРМА ============================= */
 const UA = navigator.userAgent || '';
 const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(UA) ||
                   (navigator.maxTouchPoints && navigator.maxTouchPoints > 1 && /Mac/.test(UA) === false);
@@ -400,23 +392,18 @@ async function initVK() {
   try { await vk.send('VKWebAppInit'); } catch (e) {}
   try {
     const cfg = await vk.send('VKWebAppGetConfig');
-    if (cfg) {
-      if (cfg.insets) applyInsets(cfg.insets);
-      if (cfg.appearance === 'light') document.body.style.background = '#000';
-    }
+    if (cfg && cfg.insets) applyInsets(cfg.insets);
   } catch (e) {}
   try {
     vk.subscribe((e) => {
       const d = e && e.detail;
-      if (!d) return;
-      if (d.type === 'VKWebAppUpdateConfig' && d.data && d.data.insets) {
+      if (d && d.type === 'VKWebAppUpdateConfig' && d.data && d.data.insets) {
         applyInsets(d.data.insets);
       }
     });
   } catch (e) {}
 }
 
-/* === VK Storage — синхронизация прогресса между ПК и мобильным === */
 async function vkStorageGet(keys) {
   if (!vk) return null;
   try {
@@ -433,7 +420,7 @@ async function vkStorageGet(keys) {
       });
       return out;
     }
-  } catch (e) { console.warn('VK storage get error:', e); }
+  } catch (e) {}
   return null;
 }
 async function vkStorageSet(key, value) {
@@ -443,20 +430,16 @@ async function vkStorageSet(key, value) {
       key: VK_KEY_PREFIX + key,
       value: JSON.stringify(value),
     });
-  } catch (e) { console.warn('VK storage set error:', e); }
+  } catch (e) {}
 }
 
-/* === Реклама === */
 async function showRewardAd() {
   if (!vk) return null;
   try {
     const res = await vk.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
     if (res && res.result === true) return true;
     return false;
-  } catch (err) {
-    console.warn('VK ad error:', err);
-    return null;
-  }
+  } catch (err) { return null; }
 }
 
 /* ============================== АУДИО =================================== */
@@ -514,7 +497,6 @@ const Z_NEAR      = -CAM_DIST + 0.55;
 const CUBE_HW     = 0.22;
 const CUBE_H      = 0.48;
 const CUBE_DEPTH  = 0.18;
-
 const CUBE_COL_HW = 0.22;
 const CUBE_COL_H  = 0.56;
 const CUBE_COL_HSL = 0.34;
@@ -524,7 +506,6 @@ const FALL_KILL_Y = -3.4;
 const THEME_DIST  = 420;
 const THEME_TRANSITION_TIME = 1.6;
 
-/* === Оптимизация под мобильные === */
 const MAX_STARS      = IS_MOBILE ? 50 : 130;
 const ROAD_SEGMENTS  = IS_MOBILE ? 42 : 70;
 const SPEED_LINES    = IS_MOBILE ? 14 : 26;
@@ -547,7 +528,7 @@ const STAR_PRICE           = 2500;
 const BOOST_PRICE          = 1000;
 const RUBIES_AD_REWARD     = 1000;
 const STAR_DAILY_LIMIT     = 3;
-const RUBIES_AD_DAILY_LIMIT = 5;
+const RUBIES_AD_DAILY_LIMIT = 3;   /* было 5, стало 3 */
 const BOOST_MULT           = 2;
 
 const ABILITIES = [
@@ -623,17 +604,10 @@ const THEMES = [
     obs:{ front:'#ffe8b0', top:'#ffd080', side:'#b09040', outline:'#302000', accent:'#ffd060', style:'plain' } },
 ];
 
-const UPGRADES = [
-  { id:'speed', name:'СКОРОСТЬ', max:5, basePrice:40, step:1.2 },
-  { id:'jump',  name:'ПРЫЖОК',   max:5, basePrice:50, step:0.8 },
-];
-
-/* === localStorage с VK синхронизацией === */
 const LS = {
   get(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch{ return d; } },
   set(k,v){
     try{ localStorage.setItem(k,JSON.stringify(v)); }catch{}
-    /* синхронизация в VK Storage асинхронно */
     vkStorageSet(k, v);
   },
 };
@@ -884,7 +858,7 @@ function createGame(canvas) {
     lastSeg: 0,
     themeSeq: buildThemeSeq(0),
     shake: 0, camX: 0, camPitch: 0,
-    farZ: 120, jumpBoost: 0, skin: DEFAULT_SKIN,
+    farZ: 120, skin: DEFAULT_SKIN,
     blurOK: USE_BLUR_EFFECTS,
     deathTime: 0, deathX: 0,
     roadKeys: [{ d: 0, lanes: DEFAULT_LANES }],
@@ -919,10 +893,9 @@ function resetGame(g, opts) {
     roll:0, pitch:0
   };
   g.distance = 0;
-  g.baseSpeed = 22 + (opts.speedUp || 0) * 1.2;
+  g.baseSpeed = 22;
   g.speed = g.baseSpeed;
-  g.maxSpeed = 52 + (opts.speedUp || 0) * 1.2;
-  g.jumpBoost = (opts.jumpUp || 0) * 0.8;
+  g.maxSpeed = 52;
   g.score = 0; g.coinsCollected = 0; g.starsCollected = 0;
   g.nextSpawnZ = 60; g.over = false;
   g.lastSeg = 0;
@@ -952,7 +925,7 @@ function doAction(g, action) {
   if (action === 'left'  && p.lane > 0)             p.lane--;
   else if (action === 'right' && p.lane < maxLane) p.lane++;
   if (action === 'jump') {
-    if (!p.jumping) { p.jumping = true; p.sliding = false; p.slideT = 0; p.vy = JUMP_V + g.jumpBoost; audio.jump(); }
+    if (!p.jumping) { p.jumping = true; p.sliding = false; p.slideT = 0; p.vy = JUMP_V; audio.jump(); }
   }
   if (action === 'slide') {
     if (p.jumping) { p.vy = -16; }
@@ -1569,6 +1542,10 @@ function drawObstacle(g, o) {
 
   const farStart = g.farZ * 0.82;
   const useBlur = g.blurOK && o.z > farStart;
+  if (useBlur) {
+    const t = (o.z - farStart) / (g.farZ - farStart);
+    ctx.filter = `blur(${Math.min(t * 2.0, 2.0)}px)`;
+  }
 
   const oSeg = Math.floor((g.distance + o.z) / THEME_DIST);
   const oThemeIdx = themeForSeg(g, oSeg);
@@ -1693,6 +1670,8 @@ function drawObstacle(g, o) {
     ctx.fillText(o.moveType === 'approach' ? '▼' : '↔', ax, ay + 4);
     ctx.restore();
   }
+
+  if (useBlur) ctx.filter = 'none';
 }
 
 function drawGap(g, o) {
@@ -2080,7 +2059,6 @@ const state = {
   bank: LS.get('nb_bank', 0),
   stars: LS.get('nb_stars', 0),
   starsAll: LS.get('nb_stars_all', 0),
-  upgrades: LS.get('nb_upgrades', { speed: 0, jump: 0 }),
   runs: LS.get('nb_runs', 0),
   coinsAll: LS.get('nb_coins_all', 0),
   boost2x: LS.get('nb_boost2x', false),
@@ -2116,7 +2094,6 @@ function saveState() {
   LS.set('nb_bank', state.bank);
   LS.set('nb_stars', state.stars);
   LS.set('nb_stars_all', state.starsAll);
-  LS.set('nb_upgrades', state.upgrades);
   LS.set('nb_runs', state.runs);
   LS.set('nb_coins_all', state.coinsAll);
   LS.set('nb_boost2x', state.boost2x);
@@ -2126,9 +2103,8 @@ function saveState() {
 function updateMenuBankLine() {
   dom.menuBankLine.innerHTML = `
     <span class="ic" data-icon="gem"></span> ${state.bank}
-    &nbsp;&nbsp;
     <span class="ic" data-icon="star"></span> ${state.stars}
-    &nbsp;&nbsp;|&nbsp;&nbsp; РЕКОРД · ${state.best}
+    <span style="opacity:0.6">|</span> РЕКОРД · ${state.best}
   `;
   applyIcons(dom.menuBankLine);
 }
@@ -2145,28 +2121,20 @@ function spendStarForRevive() {
   saveState();
 }
 
-/* === Синхронизация с VK Storage при загрузке === */
+/* === Синхронизация с VK Storage === */
 async function syncFromVK() {
   if (!vk) return;
-  const keys = ['nb_best','nb_bank','nb_stars','nb_stars_all','nb_upgrades','nb_runs','nb_coins_all','nb_boost2x','nb_abilities'];
+  const keys = ['nb_best','nb_bank','nb_stars','nb_stars_all','nb_runs','nb_coins_all','nb_boost2x','nb_abilities'];
   const data = await vkStorageGet(keys);
   if (!data) return;
   let changed = false;
 
-  /* Обновляем только если в VK значение больше / свежее */
   if (typeof data.nb_best === 'number' && data.nb_best > state.best) { state.best = data.nb_best; changed = true; }
   if (typeof data.nb_coins_all === 'number' && data.nb_coins_all > state.coinsAll) { state.coinsAll = data.nb_coins_all; changed = true; }
   if (typeof data.nb_stars_all === 'number' && data.nb_stars_all > state.starsAll) { state.starsAll = data.nb_stars_all; changed = true; }
   if (typeof data.nb_runs === 'number' && data.nb_runs > state.runs) { state.runs = data.nb_runs; changed = true; }
   if (typeof data.nb_bank === 'number' && data.nb_bank > state.bank) { state.bank = data.nb_bank; changed = true; }
   if (typeof data.nb_stars === 'number' && data.nb_stars > state.stars) { state.stars = data.nb_stars; changed = true; }
-  if (data.nb_upgrades && typeof data.nb_upgrades === 'object') {
-    state.upgrades = {
-      speed: Math.max(state.upgrades.speed || 0, data.nb_upgrades.speed || 0),
-      jump:  Math.max(state.upgrades.jump  || 0, data.nb_upgrades.jump  || 0),
-    };
-    changed = true;
-  }
   if (data.nb_abilities && typeof data.nb_abilities === 'object') {
     state.abilities = {
       magnet:    Math.max(state.abilities.magnet    || 0, data.nb_abilities.magnet    || 0),
@@ -2180,7 +2148,6 @@ async function syncFromVK() {
   if (typeof data.nb_boost2x === 'boolean') { state.boost2x = state.boost2x || data.nb_boost2x; }
 
   if (changed) {
-    /* Отправляем обратно объединённое состояние */
     saveState();
     updateMenuBankLine();
     refreshPanel();
@@ -2528,36 +2495,6 @@ function renderShopPanel() {
   </div>`;
 }
 
-function renderUpgradesPanel() {
-  const items = UPGRADES.map(u => {
-    const lvl = state.upgrades[u.id] || 0;
-    const maxed = lvl >= u.max;
-    const price = u.basePrice * (lvl + 1);
-    const canBuy = !maxed && state.bank >= price;
-    const action = maxed
-      ? `<div class="buy-btn owned">MAX</div>`
-      : `<button class="buy-btn" data-buyup="${u.id}" ${canBuy ? '' : 'disabled'}><span class="ic" data-icon="gem" style="font-size:12px"></span> ${price}</button>`;
-    const icon = u.id === 'speed' ? 'bolt' : 'shield';
-    return `<div class="panel-item">
-      <div class="item-icon ic" data-icon="${icon}">${lvl}</div>
-      <div class="item-info">
-        <div class="item-name">${u.name}</div>
-        <div class="item-desc">Уровень ${lvl} / ${u.max}</div>
-      </div>
-      ${action}
-    </div>`;
-  }).join('');
-
-  return `<div class="panel">
-    <div class="panel-header">
-      <div class="panel-title">УЛУЧШЕНИЯ</div>
-      <div class="panel-bank"><span class="ic" data-icon="gem"></span> ${state.bank}</div>
-    </div>
-    <div class="panel-list">${items}</div>
-    <button class="back-btn" data-close>НАЗАД</button>
-  </div>`;
-}
-
 function renderProfilePanel() {
   const gem = `<span class="ic" data-icon="gem" style="font-size:14px"></span>`;
   const star = `<span class="ic" data-icon="star" style="font-size:14px"></span>`;
@@ -2579,7 +2516,6 @@ function openPanel(tab) {
   state.menuTab = tab;
   let html = '';
   if (tab === 'shop') html = renderShopPanel();
-  else if (tab === 'upgrades') html = renderUpgradesPanel();
   else if (tab === 'profile') html = renderProfilePanel();
   dom.panelOverlay.innerHTML = html;
   applyIcons(dom.panelOverlay);
@@ -2660,19 +2596,6 @@ function buyAbility(id) {
   saveState();
   refreshPanel();
 }
-function buyUpgrade(id) {
-  const u = UPGRADES.find(x => x.id === id);
-  if (!u) return;
-  const lvl = state.upgrades[u.id] || 0;
-  if (lvl >= u.max) return;
-  const price = u.basePrice * (lvl + 1);
-  if (state.bank < price) return;
-  audio.buy();
-  state.bank -= price;
-  state.upgrades = { ...state.upgrades, [u.id]: lvl + 1 };
-  saveState();
-  refreshPanel();
-}
 
 function setPhase(phase) {
   state.phase = phase;
@@ -2717,10 +2640,7 @@ function startGame() {
   const g = gameRef;
   if (!g) return;
 
-  resetGame(g, {
-    speedUp: state.upgrades.speed || 0,
-    jumpUp: state.upgrades.jump || 0,
-  });
+  resetGame(g, {});
 
   if (state.boost2x) {
     g.baseSpeed *= BOOST_MULT;
@@ -2798,14 +2718,13 @@ function bindEvents() {
   });
 
   dom.panelOverlay.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-buy],[data-buyup],[data-buy-ability],[data-close]');
+    const t = e.target.closest('[data-buy],[data-buy-ability],[data-close]');
     if (!t) return;
     if (t.hasAttribute('data-close')) { audio.click(); closePanel(); updateUIVisibility(); return; }
     if (t.dataset.buy === 'star')         buyStar();
     else if (t.dataset.buy === 'boost2x') buyBoost2x();
     else if (t.dataset.buy === 'rubies-ad') buyRubiesForAd();
     else if (t.dataset.buyAbility)        buyAbility(t.dataset.buyAbility);
-    else if (t.dataset.buyup)             buyUpgrade(t.dataset.buyup);
   });
 
   window.addEventListener('keydown', (e) => {
@@ -2858,17 +2777,13 @@ function bindEvents() {
   }, { passive: true });
 }
 
-/* === Адаптивный resize с ограничением DPR и общего разрешения === */
 let _lastResizeKey = '';
 function resize() {
   const g = gameRef; if (!g) return;
   const rect = dom.root.getBoundingClientRect();
-  let dpr = window.devicePixelRatio || 1;
-  if (IS_MOBILE) dpr = Math.min(dpr, 2);
-  else dpr = Math.min(dpr, 2);
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   const wCss = rect.width, hCss = rect.height;
-  /* Ограничение по общему количеству пикселей — главное для производительности */
   const MAX_PIXELS = IS_MOBILE ? 1400 * 900 : 2200 * 1300;
   let totalPx = wCss * hCss * dpr * dpr;
   if (totalPx > MAX_PIXELS) {
@@ -2893,14 +2808,12 @@ function resize() {
   g.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
-/* === Throttle для кадра — не гонять физику выше 60fps на 120Hz экране (опционально) === */
 const MAX_DT = 1 / 55;
 
 function main() {
   initVK();
   applyIcons(document);
 
-  /* Асинхронная синхронизация прогресса — не блокирует запуск */
   setTimeout(() => { syncFromVK(); }, 300);
 
   gameRef = createGame(dom.canvas);
@@ -2909,7 +2822,6 @@ function main() {
   g.onGameOver = (score) => handleGameOver(score);
 
   resize();
-  /* Debounce resize чтобы не пересчитывать при каждом изменении safe-area */
   let resizeTimer = null;
   const onResize = () => {
     if (resizeTimer) clearTimeout(resizeTimer);
